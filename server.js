@@ -26,6 +26,9 @@ app.use(require("./routes/static"))
 app.get("/", function(req, res){
   res.render("index", {title: "Home"})
 })
+app.get("/test", function(req, res){
+  res.send("Hello, World!");
+})
 
 /* ***********************
  * Local Server Information
