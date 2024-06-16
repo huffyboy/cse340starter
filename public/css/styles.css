@@ -8,19 +8,19 @@
 body {
   background-color: gray;
   background-image: url("/images/site/small_check.jpg");
-  
   font-family: "Roboto Slab", serif;
+  margin: 0px;
 }
 
 #wrapper {
-  border-style: solid;
-  border-width:  7px;
-  border-radius:  15px;
-  border-color: #D85116;
-  width: 85%;
+  width: 100%;
   background-color: #ffffff;
   margin: auto;
-  padding: 10px;
+  padding: 1px;
+}
+
+h1 {
+  font-size: 20px;
 }
 
 #top-header {
@@ -122,7 +122,8 @@ nav ul li:hover {
 
 .boxed-item {
   background-color: #E4801D;
-  width: 200px;
+  width: auto;
+  max-width: 200px;
   height: 90px;
   border-style: solid;
   border-width: 1px;
@@ -136,6 +137,7 @@ nav ul li:hover {
 .split-region {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .split-item {
@@ -169,25 +171,27 @@ nav ul li:hover {
   margin-bottom: 15px;
 }
 
-
-@media screen and (max-width: 800px) {
+/* Media Query for Larger Screens */
+@media screen and (min-width: 801px) {
   body {
-    margin: 0px;
+    margin: 8px;
   }
 
   #wrapper {
-    width: 100%;
-    border-width: 0px;
-    border-radius: 0px;
-    padding: 1px;
+    width: 85%;
+    border-style: solid;
+    border-width:  7px;
+    border-radius:  15px;
+    border-color: #D85116;
+    padding: 10px;
   }
 
   h1 {
-    font-size: 20px;;
+    font-size: 32px;
   }
 
   .split-region {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .split-item-two {
@@ -199,7 +203,6 @@ nav ul li:hover {
   }
 
   .boxed-item {
-    width: auto;
-    max-width: 200px;
+    width: 200px;
   }
 }
