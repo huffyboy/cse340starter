@@ -1,0 +1,51 @@
+#inv-display {
+    list-style-type: none;
+    padding: 0px;
+    /* background-color: #D85116; */
+}
+
+#inv-display li {
+    width: 80%;
+    max-width: 600px;
+    background-color: #E4801D;
+    padding: 10px;
+    margin: 20px;
+    border-radius: 5px 25px 5px 25px;
+}
+
+#inv-display hr {
+    /* width: 80%;
+    color: black; */
+    /* visibility: hidden; */
+    margin: 0 auto;
+    margin-top: 10px;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+}
+
+#inv-display li a {
+    text-decoration: none;
+    color: rgb(36, 94, 170);
+    display: block;
+    margin: auto;
+}
+
+#inv-display li a:hover {
+    color: rgb(75, 121, 182);
+}
+
+#inv-display > li > a > img {
+    display: block;
+    margin: auto;
+    border-radius: 5px;
+    width: auto;
+    height: 100px;
+}
+
+.namePrice span {
+    display: block;
+    text-align: right;
+    margin: 20px;
+    font-size: 20px;
+}

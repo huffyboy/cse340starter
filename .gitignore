@@ -17,3 +17,5 @@ pnpm-lock.yaml
 
 # .DS_Store is only for Mac users
 **/.DS_Store
+
+.vscode
