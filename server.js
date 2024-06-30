@@ -13,6 +13,7 @@ const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities/")
+const errorRoute = require("./routes/errorRoute")
 
 /* ***********************
  * View Engine and Tempaltes
@@ -26,16 +27,19 @@ app.set("layout", "./layouts/layout")
  *************************/
 app.use(require("./routes/static"))
 
-// Index route
-app.get("/", baseController.buildHome)
-
 // Test route
 app.get("/test", function(req, res){
   res.send("Hello, World!");
 })
 
+// Index route
+app.get("/", utilities.handleErrors(baseController.buildHome))
+
 // Inventory routes
-app.use("/inv", inventoryRoute)
+app.use("/inv", utilities.handleErrors(inventoryRoute))
+
+// Intentional error route
+app.use("/error", utilities.handleErrors(errorRoute))
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
@@ -49,13 +53,19 @@ app.use(async (req, res, next) => {
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+
+  if (err.status == 404){
+    message = err.message
+  } else {
+    message = 'Oh no! There was a crash. Maybe try a different route?'
+  }
+
   res.render("errors/error", {
     title: err.status || 'Server Error',
-    message: err.message,
+    message,
     nav
   })
 })
-
 
 /* ***********************
  * Local Server Information

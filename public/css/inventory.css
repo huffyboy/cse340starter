@@ -1,51 +1,60 @@
 #inv-display {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
     list-style-type: none;
-    padding: 0px;
-    /* background-color: #D85116; */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-auto-flow: dense;
+    flex-direction: column;
 }
 
 #inv-display li {
-    width: 80%;
-    max-width: 600px;
     background-color: #E4801D;
     padding: 10px;
-    margin: 20px;
     border-radius: 5px 25px 5px 25px;
-}
-
-#inv-display hr {
-    /* width: 80%;
-    color: black; */
-    /* visibility: hidden; */
-    margin: 0 auto;
-    margin-top: 10px;
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+    display: flex;
+    flex-direction: column;
 }
 
 #inv-display li a {
     text-decoration: none;
-    color: rgb(36, 94, 170);
+    color: #1E3A5A;
     display: block;
     margin: auto;
 }
 
 #inv-display li a:hover {
-    color: rgb(75, 121, 182);
+    color: #4B79B6;
 }
 
-#inv-display > li > a > img {
+#inv-display li a img {
     display: block;
     margin: auto;
-    border-radius: 5px;
-    width: auto;
-    height: 100px;
+    max-height: 100px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.namePrice {
+    text-align: center;
+    margin-top: 10px;
 }
 
 .namePrice span {
     display: block;
-    text-align: right;
-    margin: 20px;
     font-size: 20px;
+}
+
+#inv-display hr {
+    border: 0;
+    height: 1px;
+    margin: 10px auto;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+}
+
+/* Media Query for Larger Screens */
+@media screen and (min-width: 801px) {
+    #inv-display {
+        display: grid;
+    }
 }

@@ -1,4 +1,3 @@
-/******* Change Box Model ***************/
 *,
 *:before,
 *:after {
@@ -9,14 +8,15 @@ body {
   background-color: gray;
   background-image: url("/images/site/small_check.jpg");
   font-family: "Roboto Slab", serif;
-  margin: 0px;
+  margin: 0;
+  color: #221f30;
 }
 
 #wrapper {
   width: 100%;
   background-color: #ffffff;
   margin: auto;
-  padding: 1px;
+  padding: 5px;
 }
 
 h1 {
@@ -26,8 +26,7 @@ h1 {
 #top-header {
   display: flex;
   flex-wrap: nowrap;
-  margin-top: 15px;
-  margin-bottom: 20px;
+  margin: 15px 0 20px;
 }
 
 .siteName {
@@ -51,30 +50,30 @@ h1 {
   position: absolute;
   top: 10%;
   left: 10%;
-  color: #D85116;
+  color: #d85116;
   background-color: rgba(255, 255, 255, 0.75);
+  padding: 10px;
 }
 
 .front-text-box p,
 .front-text-box h2 {
-  margin: 0px;
+  margin: 0;
 }
 
 .front-text-box a {
   text-decoration: none;
   color: black;
-  background-color: #E4801D;
+  background-color: #e4801d;
   padding: 15px 25px;
   margin: 20px;
   display: inline-block;
   font-family: "Roboto", sans-serif;
   font-weight: 700;
-
-  box-shadow: 
-    /* Top and Left Glow */
-    -2px -2px 2px rgba(255, 255, 255, 0.5),
-    /* Bottom and Right Shadow */
-    4px 4px 4px rgba(0, 0, 0, 0.5);
+  box-shadow:
+  /* Top and Left Glow */
+  -2px -2px 2px rgba(255, 255, 255, 0.5),
+  /* Bottom and Right Shadow */
+  4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .front-text-box a:hover,
@@ -102,7 +101,7 @@ nav ul {
   list-style-type: none;
   display: flex;
   flex-wrap: nowrap;
-  padding: 0px;
+  padding: 0;
 }
 
 nav ul li {
@@ -111,7 +110,6 @@ nav ul li {
   padding: 10px;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-style: normal;
 }
 
 nav ul li a {
@@ -129,13 +127,14 @@ nav ul li:hover {
 }
 
 .boxed-item {
-  background-color: #E4801D;
+  background-color: #e4801d;
   width: auto;
   max-width: 200px;
   height: 90px;
   border-style: solid;
   border-width: 1px;
   margin: auto;
+  text-align: center;
 }
 
 .boxed-item * {
@@ -171,7 +170,7 @@ nav ul li:hover {
 }
 
 .boxed-item img {
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 
 .reviews li {
@@ -188,9 +187,9 @@ nav ul li:hover {
   #wrapper {
     width: 85%;
     border-style: solid;
-    border-width:  7px;
-    border-radius:  15px;
-    border-color: #D85116;
+    border-width: 7px;
+    border-radius: 15px;
+    border-color: #d85116;
     padding: 10px;
   }
 

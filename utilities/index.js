@@ -25,10 +25,6 @@ Util.getNav = async function (req, res, next) {
   return list
 }
 
-module.exports = Util
-
-
-
 /* **************************************
 * Build the classification view HTML
 * ************************************ */
@@ -61,3 +57,42 @@ Util.buildClassificationGrid = async function(data){
   }
   return grid
 }
+
+/* **************************************
+* Build the inventory view HTML
+* ************************************ */
+Util.buildVehiclePage = async function(data) {
+  if (data && data.length > 0) {
+    const vehicle = data[0];
+    let formattedMiles = vehicle.inv_miles.toLocaleString('en-US');
+    let formattedPrice = '$' + Number(vehicle.inv_price).toLocaleString('en-US');
+    let page = `
+    <div id="vehicle-details">
+      <div id='vehicle-image'>
+        <img src='${vehicle.inv_image}' alt='Full image of ${vehicle.inv_make} ${vehicle.inv_model} on CSE Motors' />
+      </div>
+      <div id='vehicle-content'>
+        <ul>
+          <li><span>Year: </span>${vehicle.inv_year}</li>
+          <li><span>Color: </span>${vehicle.inv_color}</li>
+          <li><span>Miles: </span>${formattedMiles}</li>
+        </ul>
+        <h1 class='price'>${formattedPrice}</h1>
+        <p class='description'>${vehicle.inv_description}</p>
+      </div>
+    </div>
+    `;
+    return page;
+  } else {
+    return '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+}
+
+/* ****************************************
+ * Middleware For Handling Errors
+ * Wrap other function in this for 
+ * General Error Handling
+ **************************************** */
+Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+
+module.exports = Util

@@ -1,0 +1,68 @@
+#vehicle-details {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 90%;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+#vehicle-image {
+    margin: auto;
+    margin: 10px;
+}
+
+#vehicle-content ul {
+    list-style: none;
+    padding-left: 20px
+}
+
+#vehicle-content ul li {
+    margin-bottom: 8px;
+}
+
+#vehicle-content ul li span {
+    margin-right: 10px;
+}
+
+#vehicle-image img {
+    width: 100%;
+    margin: auto;
+}
+
+.price {
+    text-align: center;
+}
+
+.description {
+    background-color: #E4801D;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+}
+
+#vehicle-content span {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#vehicle-content {
+    background-color: #dcdcdc;
+    border-radius: 10px;
+}
+
+/* Media Query for Larger Screens */
+@media screen and (min-width: 801px) {
+    #vehicle-details {
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    #vehicle-image {
+        flex: 1;
+    }
+    #vehicle-content {
+        flex: 1;
+    }
+}
