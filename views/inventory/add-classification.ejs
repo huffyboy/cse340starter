@@ -1,0 +1,29 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { %>
+    <script>
+        window.location.href = "/";
+    </script>
+<% } %>
+
+<% errors = (typeof errors !== 'undefined' && errors !== null) ? errors : [] %>
+<% if (errors.length > 0) { %>
+    <ul class="notice">
+        <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<div class="management">
+    <%- messages() %>
+    <form id="addClassificationForm" action="/inv/add-classification" method="post">
+        <div>
+            <label for="classification_name">New Classification Name:</label>
+            <input type="text" id="classification_name" name="classification_name" pattern="[a-zA-Z0-9_]+" required>
+        </div>
+        <div>
+            <button type="submit">Create</button>
+        </div>
+    </form>
+</div>

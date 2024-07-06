@@ -25,6 +25,18 @@ async function getInventoryByClassificationId(classification_id) {
   }
 }
 
+async function getClassificationNameById(classification_id) {
+  try {
+    const data = await pool.query(
+      `SELECT * FROM public.classification WHERE classification_id = $1`,
+      [classification_id]
+    )
+    return data.rows
+  } catch (error) {
+    console.error("getclassificationsbyid error " + error)
+  }
+}
+
 async function getInventoryById(inventory_id) {
   try {
     const data = await pool.query(
@@ -38,4 +50,33 @@ async function getInventoryById(inventory_id) {
   }
 }
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById};
+/* **********************
+ *   Check for existing classification
+ * ********************* */
+async function checkExistingClassification(classification_name){
+  try {
+    const sql = "SELECT * FROM classification WHERE classification_name = $1"
+    const classification = await pool.query(sql, [classification_name])
+    return classification.rowCount
+  } catch (error) {
+    return error.message
+  }
+}
+
+async function addClassification(classification_name) {
+  try {
+      const sql = "INSERT INTO classification (classification_name) VALUES ($1) RETURNING *"
+      return await pool.query(sql, [classification_name])
+  } catch (error) {
+      return error.message
+  }
+}
+
+module.exports = {
+  getClassifications,
+  getInventoryByClassificationId,
+  getInventoryById,
+  checkExistingClassification,
+  addClassification,
+  getClassificationNameById,
+};

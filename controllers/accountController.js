@@ -15,7 +15,6 @@ async function buildLogin(req, res, next, params = {}) {
     })
 }
 
-
 /* ****************************************
 *  Deliver registration view
 * *************************************** */
@@ -29,12 +28,10 @@ async function buildRegister(req, res, next, params = {}) {
     })
 }
 
-
 /* ****************************************
 *  Process Registration
 * *************************************** */
 async function registerAccount(req, res) {
-    let nav = await utilities.getNav()
     const { account_firstname, account_lastname, account_email, account_password } = req.body
 
     try {
