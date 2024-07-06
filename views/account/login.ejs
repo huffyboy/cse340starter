@@ -1,0 +1,27 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { %>
+    <script>
+        window.location.href = "/";
+    </script>
+<% } %>
+
+<div>
+    <%- messages() %>
+    <form action="/account/login" method="POST">
+        <div>
+            <label for="account_email">Email:</label>
+            <input type="email" id="account_email" name="account_email" required>
+        </div>
+        <div>
+            <label for="account_password">Password:</label>
+            <span>Passwords must contain a minimum of 12 characters, at least 1 capital letter, at least 1 number, and at least 1 special character.</span>
+            <input type="password" id="account_password" name="account_password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+        </div>
+        <div>
+            <button type="submit">LOGIN</button>
+        </div>
+        <p>No Account? <a href="/account/register">Sign-up</a></p>
+    </form>
+</div>
+<script src="/js/script.js"></script>
