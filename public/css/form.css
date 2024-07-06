@@ -1,13 +1,3 @@
-input:required:invalid, input:focus:invalid {
-    color: red;
-    /* border: 2px solid red; */
-}
-
-input:required:valid {
-    color: green;
-    /* border: 2px solid green; */
-}
-
 form {
     background-color: rgb(243, 177, 127);
     border-radius: 15px;
@@ -45,13 +35,23 @@ form input {
     box-sizing: border-box;
 }
 
-/* input:required:invalid, input:focus:invalid {
-    background-image: url(/images/invalid.png);
-    background-position: right top;
-    background-repeat: no-repeat;
+input:required:invalid, input:focus:invalid {
+    color: red;
 }
+
 input:required:valid {
-    background-image: url(/images/valid.png);
-    background-position: right top;
-    background-repeat: no-repeat;
-} */
+    color: black;
+}
+
+.notice {
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+}
+
+.notice li {
+    margin-bottom: 5px;
+    margin-left: 15px;
+}
