@@ -66,14 +66,27 @@ invCont.buildAddClassification = async function (req, res, next, params = {}) {
 }
 
 invCont.buildAddInventory = async function (req, res, next, params = {}) {
-    let nav = await utilities.getNav()
+    let nav = await utilities.getNav();
+    const { classification_id, inv_image, inv_thumbnail } = req.body;
+
+    // Clean up parameters if they are provided
+    const clean_inv_image = inv_image ? utilities.decodeHTMLEntities(inv_image) : inv_image;
+    const clean_inv_thumbnail = inv_thumbnail ? utilities.decodeHTMLEntities(inv_thumbnail) : inv_thumbnail;
+
+    const classificationSelect = await utilities.buildClassificationList(classification_id);
+    const imageSelect = await utilities.buildImageList(false, clean_inv_image);
+    const thumbnailSelect = await utilities.buildImageList(true, clean_inv_thumbnail);
+
     res.render("./inventory/add-inventory", {
         title: `Add New Inventory`,
         styles: ['form', 'management'],
         nav,
+        classificationSelect,
+        imageSelect,
+        thumbnailSelect,
         ...params,
-    })
-}
+    });
+};
 
 invCont.addClassification = async function (req, res) {
     const { classification_name } = req.body
@@ -89,8 +102,49 @@ invCont.addClassification = async function (req, res) {
             res.status(501).redirect("/inv/add-classification")
         }
     } catch (error) {
-        req.flash("notice", 'Sorry, there was an error processing the registration.')
-        res.status(500).redirect("/inv/register")
+        req.flash("notice", 'Sorry, there was an error adding the classification.')
+        res.status(500).redirect("/inv/add-classification")
+    }
+}
+
+invCont.addInventory = async function (req, res) {
+    const {
+        classification_id,
+        inv_make,
+        inv_model,
+        inv_year,
+        inv_price,
+        inv_miles,
+        inv_color,
+        inv_description,
+        inv_image,
+        inv_thumbnail,
+    } = req.body
+
+    try {
+        const addResult = await invModel.addInventory(
+            classification_id,
+            inv_make,
+            inv_model,
+            inv_year,
+            inv_price,
+            inv_miles,
+            inv_color,
+            inv_description,
+            inv_image,
+            inv_thumbnail,
+        )
+
+        if (addResult) {
+            req.flash("notice", "Vehicle has been added.")
+            res.status(201).redirect("/inv/add-inventory")
+        } else {
+            req.flash("notice", "Sorry, the vehicle failed to be added.")
+            res.status(501).redirect("/inv/add-inventory")
+        }
+    } catch (error) {
+        req.flash("notice", 'Sorry, there was an error adding the vehicle.')
+        res.status(500).redirect("/inv/add-inventory")
     }
 }
 

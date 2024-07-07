@@ -25,14 +25,40 @@ form p {
     text-align: center;
 }
 
-form input {
+form input,
+form textarea,
+form select {
     width: 100%;
-    max-width: 300px;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+}
+
+form input,
+form select {
+    max-width: 300px;
+}
+
+form textarea {
+    height: 70px;
+    max-width: 100%;
+}
+
+.image-preview {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px auto;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 input:required:invalid, input:focus:invalid {

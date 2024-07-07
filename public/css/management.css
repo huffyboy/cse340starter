@@ -13,7 +13,7 @@
 
 .content a {
     display: inline-block;
-    background-color: #48a14b;
+    background-color: #3a823d;
     color: white;
     text-align: center;
     padding: 14px 20px;
@@ -21,11 +21,12 @@
     border-radius: 5px;
     margin: 10px 0;
     transition: background-color 0.3s;
-    width: 225px;
+    width: 250px;
+    font-size: large;
 }
 
 .content a:hover {
-    background-color: rgb(55, 135, 59);
+    background-color: rgb(43, 102, 47);
 }
 
 .management form {
