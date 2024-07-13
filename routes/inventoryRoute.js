@@ -11,10 +11,12 @@ router.get("/type/:classificationId", utilities.handleErrors(invController.build
 // Route to build inventory view
 router.get("/detail/:inventoryId", utilities.handleErrors(invController.buildByInventoryId));
 
+// management home view and helper endpoints
 router.get("/", utilities.handleErrors(invController.buildManagement));
-router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification));
-router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory));
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
 
+// add classification form and post
+router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification));
 router.post(
     "/add-classification",
     formValidate.classificationRules(),
@@ -22,11 +24,29 @@ router.post(
     utilities.handleErrors(invController.addClassification),
 )
 
+// add inventory form and post
+router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory));
 router.post(
     "/add-inventory",
     formValidate.inventoryRules(),
     formValidate.checkInventoryData,
     utilities.handleErrors(invController.addInventory),
+)
+
+// edit inventory form and post
+router.get("/edit/:inventory_id", utilities.handleErrors(invController.buildEditInventory))
+router.post(
+    "/update/",
+    formValidate.inventoryRules(),
+    formValidate.checkUpdateData,
+    utilities.handleErrors(invController.updateInventory),
+)
+
+// delete inventory form and post
+router.get("/delete/:inventory_id", utilities.handleErrors(invController.buildDeleteConfirm))
+router.post(
+    "/delete/",
+    utilities.handleErrors(invController.deleteInventory),
 )
 
 module.exports = router;

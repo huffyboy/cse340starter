@@ -18,6 +18,7 @@ const errorRoute = require("./routes/errorRoute")
 const session = require("express-session")
 const pool = require('./database/')
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
 
 /* ***********************
  * Middleware
@@ -40,6 +41,9 @@ app.use(function(req, res, next){
 })
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(cookieParser())
+app.use(utilities.checkJWTToken)
+app.use(utilities.logRoutes)
 
 /* ***********************
  * View Engine and Tempaltes
@@ -81,6 +85,9 @@ app.use(async (req, res, next) => {
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  if (process.env.NODE_ENV === 'development') {
+    console.error('\x1b[31m', err.stack, '\x1b[0m');
+  }
 
   if (err.status == 404){
     message = err.message

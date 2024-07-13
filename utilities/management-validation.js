@@ -10,7 +10,7 @@ validate.classificationRules = () => {
   return [
     body("classification_name")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please provide a valid classification name.")
@@ -42,7 +42,7 @@ validate.inventoryRules = () => {
   return [
     body("classification_id")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please select a classification from the dropdown menu.")
@@ -55,21 +55,21 @@ validate.inventoryRules = () => {
 
     body("inv_make")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please provide the make of the vehicle."),
 
     body("inv_model")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .isLength({ min: 1 })
       .withMessage("Please provide the model of the vehicle."),
 
     body("inv_year")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .withMessage("Please provide the year of the vehicle.")
       .isLength({ min: 4, max: 4 })
@@ -77,7 +77,7 @@ validate.inventoryRules = () => {
 
     body("inv_price")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .isNumeric()
       .matches(/^\d{1,9}$/)
@@ -85,7 +85,7 @@ validate.inventoryRules = () => {
 
     body("inv_miles")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .isNumeric()
       .matches(/^\d+$/)
@@ -93,30 +93,29 @@ validate.inventoryRules = () => {
 
     body("inv_color")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .withMessage("Color must consist of letters and spaces only."),
 
     body("inv_description")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .withMessage("Description cannot be empty."),
 
     body("inv_image")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .withMessage("Please provide a valid image.")
       .custom(async (inv_image) => {
-        const decodedImagePath = utilities.decodeHTMLEntities(inv_image);
         const regexPattern = /^\/images\/vehicles\/[\w\-\.]+\.(jpg|jpeg|png|gif|bmp)$/i;
-        if (!regexPattern.test(decodedImagePath)) {
+        if (!regexPattern.test(inv_image)) {
           throw new Error("Please provide a valid image.");
         }
 
         const imageFiles = await utilities.getVehicleImages();
-        const filename = path.basename(decodedImagePath);
+        const filename = path.basename(inv_image);
         if (!imageFiles.includes(filename)) {
           throw new Error("Image not found, please make sure the file is available.");
         }
@@ -124,18 +123,17 @@ validate.inventoryRules = () => {
 
     body("inv_thumbnail")
       .trim()
-      .escape()
+      // .escape()
       .notEmpty()
       .withMessage("Please provide a valid thumbnail.")
       .custom(async (inv_thumbnail) => {
-        const decodedThumbnailPath = utilities.decodeHTMLEntities(inv_thumbnail);
         const regexPattern = /^\/images\/vehicles\/[\w\-\.]+-tn\.(jpg|jpeg|png|gif|bmp)$/i;
-        if (!regexPattern.test(decodedThumbnailPath)) {
+        if (!regexPattern.test(inv_thumbnail)) {
           throw new Error("Please provide a valid thumbnail.");
         }
 
         const imageFiles = await utilities.getVehicleThumbnailImages();
-        const filename = path.basename(decodedThumbnailPath);
+        const filename = path.basename(inv_thumbnail);
         if (!imageFiles.includes(filename)) {
           throw new Error("Thumbnail not found, please make sure the file is available.");
         }
@@ -155,5 +153,15 @@ validate.checkInventoryData = async (req, res, next) => {
   next()
 }
 
+validate.checkUpdateData = async (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return invController.buildEditInventory(req, res, next, {
+      errors: errors.array(),
+      ...req.body,
+    })
+  }
+  next()
+}
 
 module.exports = validate

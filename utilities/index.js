@@ -1,4 +1,7 @@
 const invModel = require("../models/inventory-model")
+const jwt = require("jsonwebtoken")
+const he = require('he');
+require("dotenv").config()
 const Util = {}
 
 /* ************************
@@ -6,7 +9,6 @@ const Util = {}
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications()
-  // console.log(data)
   let list = "<ul>"
   list += '<li><a href="/" title="Home page">Home</a></li>'
   data.rows.forEach((row) => {
@@ -58,9 +60,8 @@ Util.buildClassificationGrid = async function(data){
 /* **************************************
 * Build the inventory view HTML
 * ************************************ */
-Util.buildVehiclePage = async function(data) {
-  if (data && data.length > 0) {
-    const vehicle = data[0];
+Util.buildVehiclePage = async function(vehicle) {
+  if (vehicle) {
     let formattedMiles = vehicle.inv_miles.toLocaleString('en-US');
     let formattedPrice = '$' + Number(vehicle.inv_price).toLocaleString('en-US');
     let page = `
@@ -103,7 +104,7 @@ Util.buildClassificationList = async function (classification_id = null) {
   return classificationList;
 };
 
-Util.getImages = function (filterCondition) {
+Util.getImages = async function (filterCondition) {
   const fs = require("fs");
   const path = require("path");
   const imagePath = path.join(__dirname, "..", "public", "images", "vehicles");
@@ -160,12 +161,37 @@ Util.buildImageList = async function (thumbnailOnly = false, imageFile = null) {
   return imageList;
 }
 
-Util.decodeHTMLEntities = function (text) {
-  const entities = {
-    '&#x2F;': '/',
-  };
-  return text.replace(/&#x[0-9A-Fa-f]+;/g, match => entities[match] || match);
+// decode data
+Util.decodeHTMLEntities = function (data) {
+  if (Array.isArray(data)) {
+    return data.map(item => (typeof item === 'string' ? he.decode(item) : item));
+  } else if (typeof data === 'object' && data !== null) {
+    for (let key in data) {
+      if (data.hasOwnProperty(key) && typeof data[key] === 'string') {
+        data[key] = he.decode(data[key]);
+      }
+    }
+    return data;
+  } else if (typeof data === 'string') {
+    return he.decode(data);
+  } else {
+    return data;
+  }
+};
+
+// middleware to decode from data
+Util.decodeHTMLEntitiesMiddleware = (req, res, next) => {
+  if (req.body) {
+    for (let key in req.body) {
+      if (req.body.hasOwnProperty(key)) {
+        req.body[key] = he.decode(req.body[key]);
+      }
+    }
+  }
+  next();
 }
+
+
 
 /* ****************************************
  * Middleware For Handling Errors
@@ -173,5 +199,52 @@ Util.decodeHTMLEntities = function (text) {
  * General Error Handling
  **************************************** */
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+
+/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWTToken = (req, res, next) => {
+  if (req.cookies.jwt) {
+   jwt.verify(
+    req.cookies.jwt,
+    process.env.ACCESS_TOKEN_SECRET,
+    function (err, accountData) {
+     if (err) {
+      req.flash("Please log in")
+      res.clearCookie("jwt")
+      return res.redirect("/account/login")
+     }
+     res.locals.accountData = accountData
+     res.locals.loggedin = 1
+     next()
+    })
+  } else {
+   next()
+  }
+ }
+
+ /* ****************************************
+ *  Check Login
+ * ************************************ */
+ Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+ }
+
+
+Util.logRoutes = (req, res, next) => {
+  const ignoredExtensions = ['.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico'];
+  const shouldIgnore = ignoredExtensions.some(ext => req.originalUrl.endsWith(ext));
+
+  if (!shouldIgnore) {
+    console.log('\x1b[90m', req.method, '\x1b[0m', '\x1b[34m', req.originalUrl, '\x1b[0m');
+  }
+
+  next()
+}
 
 module.exports = Util
