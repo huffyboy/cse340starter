@@ -54,7 +54,7 @@ async function registerAccount(req, res) {
             res.status(201).redirect("/account/login")
         } else {
             req.flash("notice", "Sorry, the registration failed.")
-            res.status(501).redirect("/account/register")
+            res.status(500).redirect("/account/register")
         }
     } catch (error) {
         req.flash("notice", 'Sorry, there was an error processing the registration.')
@@ -95,18 +95,102 @@ async function accountLogin(req, res) {
     }
 }
 
+
+/* ****************************************
+ *  Process logout request
+ * ************************************ */
+async function accountLogout(req, res, next, params = {}) {
+    res.clearCookie("jwt");
+    req.flash("notice", "You have successfully logged out.");
+    return res.redirect("/")
+}
+
 /* ****************************************
 *  Deliver logged in view
 * *************************************** */
-async function buildDefault(req, res, next, params = {}) {
+async function buildLoginHome(req, res, next, params = {}) {
     let nav = await utilities.getNav()
-    res.render("account/default", {
+    res.locals.hasEmployeeAccess = utilities.checkEmployeeAccess(res.locals.accountData.account_type);
+    res.render("account/home", {
         title: "Logged In",
-        // styles: ['form'],
+        styles: ['management'],
         nav,
         ...params,
     })
 }
 
+/* ****************************************
+*  Deliver update account view
+* *************************************** */
+async function buildAccountUpdate(req, res, next, params = {}) {
+    let nav = await utilities.getNav()
+    const account_id = res.locals.accountData.account_id;
+    const data = await accountModel.getAccountById(account_id)
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildDefault }
+    res.render("account/update", {
+        title: "Update Account",
+        styles: ['form', 'management'],
+        nav,
+        ...params,
+        ...data,
+        account_id,
+    })
+}
+
+async function updateAccount(req, res, next, params = {}) {
+    const { account_firstname, account_lastname, account_email } = req.body
+    const old_account_email = res.locals.accountData.account_email
+
+    try {
+        const updateResult = await accountModel.updateAccount(
+            account_firstname,
+            account_lastname,
+            account_email,
+            old_account_email,
+        )
+
+        if (updateResult) {
+            req.flash("notice", `Your account has been updated`)
+            res.status(200).redirect("/account/update")
+        } else {
+            req.flash("notice", "Sorry, the update failed.")
+            res.status(500).redirect("/account/update")
+        }
+    } catch (error) {
+        req.flash("notice", 'Sorry, there was an error processing the update.')
+        res.status(500).redirect("/account/update")
+    }
+}
+
+async function updatePassword(req, res, next, params = {}) {
+    const { account_password, account_id } = req.body
+
+    try {
+        const hashedPassword = await bcrypt.hash(account_password, 10)
+        const updateResult = await accountModel.updatePassword(account_id, hashedPassword)
+
+        if (updateResult) {
+            req.flash("notice", `Your password has been changed`)
+            res.status(200).redirect("/account/update")
+        } else {
+            req.flash("notice", "Sorry, the password change failed.")
+            res.status(500).redirect("/account/update")
+        }
+    } catch (error) {
+        req.flash("notice", 'Sorry, there was an error processing the password change.')
+        res.status(500).redirect("/account/update")
+    }
+}
+
+
+module.exports = {
+    buildLogin,
+    buildRegister,
+    registerAccount,
+    accountLogin,
+    buildLoginHome,
+    buildAccountUpdate,
+    updateAccount,
+    updatePassword,
+    accountLogout,
+}

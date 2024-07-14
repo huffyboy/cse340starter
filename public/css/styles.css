@@ -178,6 +178,17 @@ nav ul li:hover {
   margin-bottom: 15px;
 }
 
+#tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#tools a {
+  text-decoration: none;
+  padding: 8px 12px;
+}
+
 /* Media Query for Larger Screens */
 @media screen and (min-width: 801px) {
   body {
@@ -211,5 +222,14 @@ nav ul li:hover {
 
   .boxed-item {
     width: 200px;
+  }
+
+  #tools {
+    align-items: flex-end;
+  }
+
+  #tools a {
+      padding: 5px 10px;
+      margin-bottom: 5px;
   }
 }

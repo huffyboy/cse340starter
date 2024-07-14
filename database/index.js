@@ -29,8 +29,12 @@ if (process.env.NODE_ENV == "development") {
 
         return res
         } catch (error) {
-        console.error("error in query", { text })
-        throw error
+          console.error(`\x1b[31m error in query \x1b[0m`, { text });
+          if (process.env.NODE_ENV === 'development') {
+            // print error in red
+            console.error('\x1b[31m', error.stack, '\x1b[0m');
+          }
+          throw error
         }
     },
     }

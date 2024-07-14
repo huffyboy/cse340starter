@@ -86,6 +86,7 @@ app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
   if (process.env.NODE_ENV === 'development') {
+    // print error in red
     console.error('\x1b[31m', err.stack, '\x1b[0m');
   }
 

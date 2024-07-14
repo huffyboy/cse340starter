@@ -16,7 +16,7 @@
    buildInventoryList(data); 
   }) 
   .catch(function (error) { 
-   console.log('There was a problem: ', error.message) 
+   console.error('There was a problem: ', error.message) 
   }) 
  })
 

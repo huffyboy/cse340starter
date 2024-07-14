@@ -52,7 +52,7 @@ invCont.buildManagement = async function (req, res, next) {
 
     res.render("./inventory/management", {
         title: `Management`,
-        styles: ['management'],
+        styles: ['form', 'management'],
         nav,
         classificationSelect,
     })
@@ -177,7 +177,7 @@ invCont.buildEditInventory = async (req, res, next, params = {}) => {
     const thumbnailSelect = await utilities.buildImageList(true, inv_thumbnail);
 
     res.render("./inventory/edit-inventory", {
-        title: `Edit ${inv_make} ${inv_model}`,
+        title: `Edit ${data.inv_make} ${data.inv_model}`,
         styles: ['form', 'management'],
         nav,
         classificationSelect,

@@ -89,7 +89,7 @@ Util.buildVehiclePage = async function(vehicle) {
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications();
   let classificationList = '<select name="classification_id" id="classificationList" required>';
-  classificationList += "<option value='' disabled selected>Choose a Classification</option>";
+  classificationList += "<option value='' disabled>Choose a Classification</option>";
   data.rows.forEach((row) => {
     classificationList += '<option value="' + row.classification_id + '"';
     if (
@@ -221,26 +221,45 @@ Util.checkJWTToken = (req, res, next) => {
   } else {
    next()
   }
- }
+}
 
- /* ****************************************
- *  Check Login
- * ************************************ */
- Util.checkLogin = (req, res, next) => {
+/* ****************************************
+*  Check Login
+* ************************************ */
+Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next()
   } else {
     req.flash("notice", "Please log in.")
     return res.redirect("/account/login")
   }
- }
+}
 
+/* ****************************************
+*  Check Employee Access
+* ************************************ */
+Util.checkEmployeeAccess = (account_type) => {
+  return ['Admin', 'Employee'].includes(account_type);
+}
+
+/* ****************************************
+*  Check Employee Access Middleware
+* ************************************ */
+Util.checkEmployeeAccessMiddleware = (req, res, next) => {
+  if (Util.checkEmployeeAccess(res.locals.accountData.account_type)) {
+    next()
+  } else {
+    req.flash("notice", "You do not have access to this operation.")
+    return res.redirect("/")
+  }
+}
 
 Util.logRoutes = (req, res, next) => {
   const ignoredExtensions = ['.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico'];
   const shouldIgnore = ignoredExtensions.some(ext => req.originalUrl.endsWith(ext));
 
   if (!shouldIgnore) {
+    // print routes in gray and blue
     console.log('\x1b[90m', req.method, '\x1b[0m', '\x1b[34m', req.originalUrl, '\x1b[0m');
   }
 

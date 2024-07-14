@@ -1,0 +1,53 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { %>
+    <script>
+        window.location.href = "/";
+    </script>
+<% } %>
+
+<div class="management content">
+    <% errors = (typeof errors !== 'undefined' && errors !== null) ? errors : [] %>
+    <% if (errors.length > 0) { %>
+        <ul class="notice">
+            <% errors.forEach(error => { %>
+                <li><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+    <%- messages() %>
+    <form id="updateAccountForm" action="/account/update" method="post">
+        <div>
+            <label for="account_firstname">First Name:</label>
+            <input type="text" id="account_firstname" name="account_firstname" value="<%= locals.account_firstname %>" required>
+        </div>
+        <div>
+            <label for="account_lastname">Last Name:</label>
+            <input type="text" id="account_lastname" name="account_lastname" value="<%= locals.account_lastname %>" required>
+        </div>
+        <div>
+            <label for="account_email">Email:</label>
+            <input type="email" id="account_email" name="account_email" value="<%= locals.account_email %>" required>
+        </div>
+        <div>
+            <button type="submit">Update Account</button>
+        </div>   
+    </form>
+    <form id="passwordForm" action="/account/update-password" method="post">
+        <div>
+            <label for="account_password">New Password:</label>
+            <span>Passwords must contain a minimum of 12 characters, at least 1 capital letter, at least 1 number, and at least 1 special character.</span>
+            <input type="password" id="account_password" name="account_password" value="<%= locals.account_password %>" required>
+            <span>This will change your password</span>
+        </div>
+        <div>
+            <button type="submit">Change Password</button>
+            <input
+            type="hidden" name="account_id"
+                <% if(locals.account_id) { %>
+                    value="<%= locals.account_id %>"
+                <% } %>
+            >
+        </div>
+    </form>
+</div>

@@ -25,9 +25,9 @@ form p {
     text-align: center;
 }
 
-form input,
-form textarea,
-form select {
+input,
+textarea,
+select {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -36,12 +36,19 @@ form select {
     box-sizing: border-box;
 }
 
-form input,
-form select {
+input[readonly],
+textarea[readonly],
+select[readonly] {
+    background-color: #cbcbcb;
+    cursor: not-allowed;
+}
+
+input,
+select {
     max-width: 300px;
 }
 
-form textarea {
+textarea {
     height: 70px;
     max-width: 100%;
 }
