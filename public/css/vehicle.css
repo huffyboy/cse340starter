@@ -52,6 +52,41 @@
     border-radius: 10px;
 }
 
+.review {
+    background-color: #dcdcdc;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.review p {
+    margin: 0px;
+}
+
+.review hr {
+    height: 3px;
+    border: none;
+    background-color: black;
+    margin: 5px 0;
+}
+
+.review .screen_name {
+    font-weight: bold;
+}
+
+.reviews li {
+    margin-bottom: 5px;
+}
+
+.highlight {
+    background-color: aquamarine;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#addReviewForm h3 {
+    margin-top: 0px;
+}
+
 /* Media Query for Larger Screens */
 @media screen and (min-width: 801px) {
     #vehicle-details {

@@ -1,5 +1,6 @@
 const utilities = require("../utilities/")
 const accountModel = require("../models/account-model")
+const reviewModel = require("../models/review-model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
@@ -111,10 +112,12 @@ async function accountLogout(req, res, next, params = {}) {
 async function buildLoginHome(req, res, next, params = {}) {
     let nav = await utilities.getNav()
     res.locals.hasEmployeeAccess = utilities.checkEmployeeAccess(res.locals.accountData.account_type);
+    const reviews = await reviewModel.getReviewsByAccountId(res.locals.accountData.account_id)
     res.render("account/home", {
         title: "Logged In",
         styles: ['management'],
         nav,
+        reviews,
         ...params,
     })
 }

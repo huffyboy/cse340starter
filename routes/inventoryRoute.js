@@ -51,7 +51,7 @@ router.post(
 
 // edit inventory form and post
 router.get(
-    "/edit/:inventory_id",
+    "/edit/:inv_id",
     utilities.checkEmployeeAccessMiddleware,
     utilities.handleErrors(invController.buildEditInventory)
 )
@@ -65,7 +65,7 @@ router.post(
 
 // delete inventory form and post
 router.get(
-    "/delete/:inventory_id",
+    "/delete/:inv_id",
     utilities.checkEmployeeAccessMiddleware,
     utilities.handleErrors(invController.buildDeleteConfirm)
 )

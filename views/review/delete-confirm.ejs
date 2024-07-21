@@ -1,0 +1,35 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { %>
+    <script>
+        window.location.href = "/";
+    </script>
+<% } %>
+
+<% errors = (typeof errors !== 'undefined' && errors !== null) ? errors : [] %>
+<% if (errors.length > 0) { %>
+    <ul class="notice">
+        <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<div class="management">
+    <%- messages() %>
+    <form id="deleteForm" action="/review/delete" method="post">
+        <div>
+            <label for="review_date">Review Date:</label>
+            <input type="text" id="review_date" name="review_date" value="<%= locals.review_date %>" readonly>
+        </div>
+        <div>
+            <label for="review_text">Review Text:</label>
+            <textarea id="review_text" name="review_text" readonly><%= locals.review_text %></textarea>
+        </div>
+        <div>
+            <p>Confirm Deletion - The delete is permanent.</p>
+            <button type="submit">Delete Review</button>
+            <input type="hidden" name="review_id" value="<%= review_id %>">
+        </div>
+    </form>
+</div>

@@ -1,9 +1,50 @@
 <% if (title) { %>
-    <h1><%= title %></h1>
-    <% } else {
-      res.redirect('/')
-} %>
+  <h1><%= title %></h1>
+<% } %>
 
 <%# messages() %>
 
 <%- page %>
+
+<h3>Customer Reviews</h3>
+
+<!-- existing reviews -->
+<% if (reviews.length > 0) { %>
+<ul class="reviews">
+  <% reviews.forEach(function(review) { %>
+    <li>
+      <div class="review">
+        <p><span class="screen_name"><%= review.screen_name %></span> wrote on <%= review.review_date %></p>
+        <hr />
+        <p><%= review.review_text %></p>
+      </div>
+    </li>
+  <% }) %>
+</ul>
+<% } else { %>
+  <p class="highlight">Be the first to write a review.</p>
+<% } %>
+
+<!-- Display login or add review form -->
+<% if (account_id) { %>
+  <form id="addReviewForm" action="/review/add-review" method="post">
+    <h3>Leave a Review</h3>
+    <div>
+      <label for="screen_name">Screen Name:</label>
+      <input type="text" id="screen_name" name="screen_name" value="<%= screen_name %>" readonly>
+    </div>
+    <div>
+      <label for="review_text">Review:</label>
+      <textarea id="review_text" name="review_text" minlength="10" required><%= locals.review_text %></textarea>
+      <span>Review must be at least 10 characters long.</span>
+    </div>
+    <div>
+        <button type="submit">Submit Review</button>
+        <input type="hidden" name="inv_id" value="<%= inv_id %>">
+        <input type="hidden" name="account_id" value="<%= account_id %>">
+    </div>
+  </form>
+<%} else { %>
+  <p> You must <a title="Click to log in" href="/account/login">Login</a> to write a review.</p>
+<% } %>
+

@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const reviewModel = require("../models/review-model")
 const utilities = require("../utilities/")
 
 const invCont = {}
@@ -31,18 +32,29 @@ invCont.buildByClassificationId = async function (req, res, next) {
 /* ***************************
  *  Build inventory view
  * ************************** */
-invCont.buildByInventoryId = async function (req, res, next) {
-    const inventory_id = req.params.inventoryId
-    const data = await invModel.getInventoryById(inventory_id)
-    const page = await utilities.buildVehiclePage(data)
+invCont.buildByInventoryId = async function (req, res, next, params = {}) {
+    const inv_id = req.params.inventoryId;
     let nav = await utilities.getNav()
-    const make = data.inv_make
-    const model = data.inv_model
+    const data = await invModel.getInventoryById(inv_id)
+    const page = await utilities.buildVehiclePage(data)
+    const reviews = await reviewModel.getReviewsByInvId(inv_id)
+
+    const userData = res.locals.accountData || {};
+    const account_id = userData.account_id ?? null;
+    const firstName = userData.account_firstname || '';
+    const lastName = userData.account_lastname || '';
+    const screen_name = `${firstName[0] || ''} ${lastName}`.trim();
+
     res.render("./inventory/vehicle", {
-        title: `${make} ${model}`,
-        styles: ['vehicle'],
+        title: `${data.inv_make} ${data.inv_model}`,
+        styles: ['vehicle', 'form'],
         nav,
         page,
+        inv_id,
+        account_id,
+        reviews,
+        screen_name,
+        ...params, // Override data with params if available (make form sticky)
     })
 }
 
@@ -165,8 +177,8 @@ invCont.getInventoryJSON = async (req, res, next) => {
  * ************************** */
 invCont.buildEditInventory = async (req, res, next, params = {}) => {
     let nav = await utilities.getNav();
-    const inventory_id = parseInt(req.params.inventory_id)
-    const data = await invModel.getInventoryById(inventory_id)
+    const inv_id = parseInt(req.params.inv_id)
+    const data = await invModel.getInventoryById(inv_id)
 
     const classification_id = params.classification_id || data.classification_id;
     const inv_image = params.inv_image || data.inv_image;
@@ -237,8 +249,8 @@ invCont.updateInventory  = async function (req, res) {
  * ************************** */
 invCont.buildDeleteConfirm = async function (req, res, next, params = {}) {
     let nav = await utilities.getNav();
-    const inventory_id = parseInt(req.params.inventory_id)
-    const data = await invModel.getInventoryById(inventory_id)
+    const inv_id = parseInt(req.params.inv_id)
+    const data = await invModel.getInventoryById(inv_id)
     res.render("./inventory/delete-confirm", {
         title: `Delete Vehicle`,
         styles: ['form', 'management'],

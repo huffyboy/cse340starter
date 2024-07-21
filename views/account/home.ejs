@@ -25,4 +25,18 @@
         <h3>Inventory Management</h3>
         <p><a href='/inv'>Manage Inventory</a></p>
     <% } %>
+
+    <h2>My Reviews</h2>
+    <% if (reviews && reviews.length > 0) { %>
+        <ol class="review-list">
+            <% reviews.forEach(function(review) { %>
+                <li>Reviewed the <%= review.review_item %> on <%= review.review_date %> |
+                    <a title="Edit review" href="/review/edit/<%= review.review_id %>">Edit</a> |
+                    <a title="Delete review" href="/review/delete/<%= review.review_id %>">Delete</a>
+                </li>
+            <% }) %>
+        </ol>
+    <% } else { %>
+        <p>No reviews available.</p>
+    <% } %>
 </div>
