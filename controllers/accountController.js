@@ -66,33 +66,32 @@ async function registerAccount(req, res) {
 /* ****************************************
  *  Process login request
  * ************************************ */
-async function accountLogin(req, res) {
+async function accountLogin(req, res, next, params = {}) {
     let nav = await utilities.getNav()
     const { account_email, account_password } = req.body
     const accountData = await accountModel.getAccountByEmail(account_email)
     if (!accountData) {
-     req.flash("notice", "Please check your credentials and try again.")
-     res.status(400).render("account/login", {
-      title: "Login",
-      nav,
-      errors: null,
-      account_email,
-     })
-    return
+        req.flash("notice", "Please check your credentials and try again.")
+        return buildLogin(req, res, next, { account_email });
     }
     try {
-     if (await bcrypt.compare(account_password, accountData.account_password)) {
-     delete accountData.account_password
-     const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
-     if(process.env.NODE_ENV === 'development') {
-       res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-       } else {
-         res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
-       }
-     return res.redirect("/account/")
-     }
+        if (await bcrypt.compare(account_password, accountData.account_password)) {
+            delete accountData.account_password
+            const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
+            if (process.env.NODE_ENV === 'development') {
+                res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+            } else {
+                res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+            }
+            return res.redirect("/account/")
+        } else {
+            req.flash("notice", "Please check your credentials and try again.")
+            return buildLogin(req, res, next, { account_email });
+        }
     } catch (error) {
-     return new Error('Access Forbidden')
+        console.error("Login error:", error)
+        req.flash("notice", "An error occurred while processing your request. Please try again later.")
+        return buildLogin(req, res, next, { account_email });
     }
 }
 
